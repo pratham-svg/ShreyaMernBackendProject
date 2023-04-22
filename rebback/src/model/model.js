@@ -52,4 +52,4 @@ const UserSchema = new mongoose.Schema(
   );
   
   //<----------------------< Exports : UserModel >----------------------->//
-  module.exports = mongoose.model("user", UserSchema);
+  module.exports = mongoose.model("MernBackedProject", UserSchema);

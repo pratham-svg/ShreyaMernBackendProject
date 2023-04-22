@@ -12,4 +12,4 @@ module.exports = router;
 
 router.post("/register", createUser);
 router.post("/login", logInUserData);
-router.get("/user/:userId/profile", getUserData);
+router.get("/user/:userId", getUserData);

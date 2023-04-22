@@ -1,5 +1,5 @@
 const userModel=require("../model/model")
-
+const errorHandle = require('../errorHandling/errorHandling')
 
 const createUser = async (req, res) => {
     try {
@@ -11,11 +11,10 @@ const createUser = async (req, res) => {
         "pincode":pincode
       }
       data.address=address;
-      data.password = await userModel.findOne({password:password})
       const datacreate = await userModel.create(data);
       res.status(201).send({ status: true, data: datacreate });
     } catch(err) {
-      return errorHandler(err, res);
+      return errorHandle(err, res);
     }
   };
 
@@ -24,6 +23,7 @@ const createUser = async (req, res) => {
 const logInUserData = async (req, res) => {
     try {
       const data = req.body;
+      console.log(data)
       if (Object.keys(data).length == 0)
         return res.status(400).send({
           status: false,
@@ -34,30 +34,25 @@ const logInUserData = async (req, res) => {
         return res
           .status(400)
           .send({ status: false, message: "Pls provide the emailId" });
-      if (!validation.isValidEmailId(email))
-        return res
-          .status(400)
-          .send({ status: false, message: "pls provide the Valid Email" });
       if (!password)
         return res
           .status(400)
           .send({ status: false, message: "Pls provide the password" });
   
       const user = await userModel.findOne({ email: email });
-  
-      if (!user)
-        return res
+      if (!user){  
+           return res
           .status(404)
-          .send({ status: false, message: "You are not a valid user" });
+          .send({ status: false, message: "You are not a valid user" });}
   
   
       return res.status(200).send({
         status: true,
         message: "User login successfull",
-        userId: { userId: user._id, token: token },
+        userId : user._id
       });
     } catch (err) {
-      return errorHandler(err, res);
+      return errorHandle(err, res);
     }
   };
   
@@ -80,7 +75,7 @@ const getUserData = async (req, res) => {
         userdata,
       });
     } catch (err) {
-      return errorHandler(err, res);
+      return errorHandle(err, res);
     }
   };
 
